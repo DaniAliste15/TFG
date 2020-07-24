@@ -22,7 +22,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText textPassword;
     private Button buttonLogin;
     private Button buttonOlvidar;
-
+    private Button buttonRegistrar;
 
     private String email = "";
     private String password = "";
@@ -36,12 +36,15 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        this.setTitle("Iniciar sesion");
+
         mAuth = FirebaseAuth.getInstance();
 
         textEmail = (EditText) findViewById(R.id.editTextEmail);
         textPassword = (EditText) findViewById(R.id.editTextPassword);
         buttonLogin = (Button) findViewById(R.id.btnLogin);
         buttonOlvidar = (Button) findViewById(R.id.btnOlvidar);
+        buttonRegistrar = (Button) findViewById(R.id.btnRegistrar);
 
         dialog = new ProgressDialog(this);
 
@@ -51,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
                 email = textEmail.getText().toString();
                 password = textPassword.getText().toString();
 
-                if(!email.isEmpty() && !password.isEmpty()){
+                if(!email.isEmpty() && !password.isEmpty() && password.length() >= 6){
                     dialog.setTitle("Iniciando sesion");
                     dialog.setMessage("Espere...");
                     dialog.setCanceledOnTouchOutside(false);
@@ -59,7 +62,18 @@ public class LoginActivity extends AppCompatActivity {
                     loginUser();
                 }
                 else {
-                    Toast.makeText(LoginActivity.this, "Complete todos los campos", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(LoginActivity.this, "Complete todos los campos", Toast.LENGTH_SHORT).show();
+
+                    if(email.isEmpty()) {
+                        textEmail.setError("Debe rellenar este campo");
+                    }
+                    if(password.isEmpty()) {
+                        textPassword.setError("Debe rellenar este campo");
+                    }
+
+                    if(!password.isEmpty()) {
+                        textPassword.setError("Numero insuficiente de caracteres");
+                    }
                 }
             }
         });
@@ -70,6 +84,13 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(new Intent(LoginActivity.this,ResetContraActivity.class));
             }
         });
+
+        buttonRegistrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this, RegistrarActivity.class));
+            }
+        });
     }
 
     private void loginUser () {
@@ -77,6 +98,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
+                    //distingir admin de usuariosnormales
                     startActivity(new Intent(LoginActivity.this,MapaActivity.class));
                     finish();
                 }
@@ -87,5 +109,15 @@ public class LoginActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(mAuth.getCurrentUser() != null) {
+            startActivity(new Intent(LoginActivity.this,MapaActivity.class));
+            finish();
+        }
     }
 }

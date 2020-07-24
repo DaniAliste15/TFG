@@ -49,7 +49,9 @@ public class ResetContraActivity extends AppCompatActivity {
                     resetPassword();
                 }
                 else {
-                    Toast.makeText(ResetContraActivity.this, "Debe ingresar un Email", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(ResetContraActivity.this, "Debe ingresar un Email", Toast.LENGTH_SHORT).show();
+
+                    editTextEmail.setError("Debe ingresar un email");
                 }
                           }
         });

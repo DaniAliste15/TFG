@@ -6,13 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="20dp"
-    tools:context=".RegistrarActivity">
-
-    <EditText
-        android:id="@+id/editTextName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Nombre"/>
+    tools:context=".ModfiDatosActivity">
 
     <EditText
         android:id="@+id/editTextEmail"
@@ -37,17 +31,13 @@
 
 
         <Button
-        android:id="@+id/btnRegistrar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Registrar Usuario"
-        android:background="#FF0000"
-        android:textColor="#FFFFFF"/>
+            android:id="@+id/btnModificar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Modificar datos"
+            android:background="#FF0000"
+            android:textColor="#FFFFFF"/>
 
     </LinearLayout>
-
-
-
-
 
 </LinearLayout>

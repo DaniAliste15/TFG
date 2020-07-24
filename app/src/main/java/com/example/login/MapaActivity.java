@@ -2,7 +2,6 @@ package com.example.login;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.FragmentActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,16 +18,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
 
-import android.os.Bundle;
-
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 //////
 import android.Manifest;
 import android.content.Context;
@@ -38,25 +28,16 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 //import android.support.v4.app.ActivityCompat;
 //import android.support.v4.app.FragmentActivity;//esta
-import android.os.Bundle;//estaaa
 //import android.support.v4.content.ContextCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;//estaa
 import android.widget.Toast;
 
 
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -105,8 +86,8 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Toast.makeText(MapaActivity.this, "Debe seleccionar un posible incendio", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    //startActivity(new Intent(MapaActivity.this, Pantalla2Activity.class));
-                    Intent coord = new Intent(MapaActivity.this,Pantalla2Activity.class);
+                    //startActivity(new Intent(MapaActivity.this, DatosIncendioActivity.class));
+                    Intent coord = new Intent(MapaActivity.this, DatosIncendioActivity.class);
                     coord.putExtra("lati",latiIncendio);
                     coord.putExtra("longi",longiIncendio);
                     startActivity(coord);
@@ -345,7 +326,7 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             mAutho.signOut();
-                            startActivity(new Intent(MapaActivity.this,MainActivity.class));
+                            startActivity(new Intent(MapaActivity.this,LoginActivity.class));
                             finish();
                         }
                     })
@@ -376,7 +357,7 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 public void onSuccess(Void aVoid) {
                                     Toast.makeText(MapaActivity.this, "La cuenta se ha eliminado correctamente", Toast.LENGTH_SHORT).show();
                                     mAutho.signOut();
-                                    startActivity(new Intent(MapaActivity.this,MainActivity.class));
+                                    startActivity(new Intent(MapaActivity.this, RegistrarActivity.class));
                                     finish();
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
@@ -401,9 +382,22 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         if(id == R.id.listaIncendios){
-            Toast.makeText(this, "SE parasaria a otra activity mostrando todos los" +
-                    "incendios que ha detectado el usuario", Toast.LENGTH_LONG).show();
+            startActivity(new Intent(MapaActivity.this,IncendiosDetectadosActivity.class));
+            return true;
+        }
 
+        if(id == R.id.modifDados){
+            startActivity(new Intent(MapaActivity.this, ModfiDatosActivity.class));
+            return true;
+        }
+
+        if(id == R.id.miCuenta){
+            startActivity(new Intent(MapaActivity.this, MiCuentaActivity.class));
+            return true;
+        }
+
+        if(id == R.id.infoMapa){
+            startActivity(new Intent(MapaActivity.this, InfoMapaActivity.class));
             return true;
         }
 

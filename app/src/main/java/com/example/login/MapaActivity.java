@@ -52,10 +52,10 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private GoogleMap mMap;
     public FirebaseAuth mAutho;
-    public double longi=0.0,lati=0.0;
-    public double longiIncendio=0.0, latiIncendio=0.0;
-    public int flag = 0, f_mapa = 0, f_pinchado = 0, f_presionado = 0, f_clik = 0;
-    public Marker posicion, incendio_clic, incendio_longclic, incendio;
+    private double longi=0.0,lati=0.0;
+    private double longiIncendio=0.0, latiIncendio=0.0;
+    public int flag = 0, f_mapa = 0, f_clik = 0;
+    public Marker posicion, incendio;
     public MarkerOptions markerOptions = new MarkerOptions();
     private Button btnInformacion,btnHibrido,btnTerreno;
     DatabaseReference Database;
@@ -64,6 +64,11 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //icono en el action bar
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.mipmap.ic_launcher);
+        /////************/////
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapa);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.

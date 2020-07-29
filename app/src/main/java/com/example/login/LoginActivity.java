@@ -15,6 +15,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -28,8 +33,10 @@ public class LoginActivity extends AppCompatActivity {
     private String password = "";
 
     private FirebaseAuth mAuth;
+    private DatabaseReference Database;
 
     private ProgressDialog dialog;
+    private ProgressDialog dialog1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         this.setTitle("Iniciar sesion");
 
         mAuth = FirebaseAuth.getInstance();
+        Database = FirebaseDatabase.getInstance().getReference();
 
         textEmail = (EditText) findViewById(R.id.editTextEmail);
         textPassword = (EditText) findViewById(R.id.editTextPassword);
@@ -47,6 +55,7 @@ public class LoginActivity extends AppCompatActivity {
         buttonRegistrar = (Button) findViewById(R.id.btnRegistrar);
 
         dialog = new ProgressDialog(this);
+        dialog1 = new ProgressDialog(this);
 
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,9 +107,30 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    //distingir admin de usuariosnormales
-                    startActivity(new Intent(LoginActivity.this,MapaActivity.class));
-                    finish();
+                    String id = mAuth.getCurrentUser().getUid(); //obtener el id del usuario
+
+                    Database.child("Users").child(id).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            String rol = dataSnapshot.child("rol").getValue().toString();
+
+                            if(rol.equals("usuarionormal")) {
+                                startActivity(new Intent(LoginActivity.this,MapaActivity.class));
+                                finish();
+                            }
+                            else if(rol.equals("admin")) {
+                                startActivity(new Intent(LoginActivity.this,MapaAdminActivity.class));
+                                finish();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                    /*startActivity(new Intent(LoginActivity.this,MapaActivity.class));
+                    finish();*/
                 }
                 else {
                     Toast.makeText(LoginActivity.this, "No se pudo iniciar sesion,compruebe los datos" +
@@ -116,8 +146,33 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
 
         if(mAuth.getCurrentUser() != null) {
-            startActivity(new Intent(LoginActivity.this,MapaActivity.class));
-            finish();
+            dialog1.setTitle("Entrando");
+            dialog1.setMessage("Espere...");
+            dialog1.setCanceledOnTouchOutside(false);
+            dialog1.show();
+            String id = mAuth.getCurrentUser().getUid(); //obtener el id del usuario
+
+            Database.child("Users").child(id).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    String rol = dataSnapshot.child("rol").getValue().toString();
+
+                    if(rol.equals("usuarionormal")) {
+                        startActivity(new Intent(LoginActivity.this,MapaActivity.class));
+                        finish();
+                    }
+                    else if(rol.equals("admin")) {
+                        startActivity(new Intent(LoginActivity.this,MapaAdminActivity.class));
+                        finish();
+                    }
+                    dialog1.dismiss();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
         }
     }
 }

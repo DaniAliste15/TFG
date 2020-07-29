@@ -30,12 +30,13 @@ public class RegistrarActivity extends AppCompatActivity {
     private EditText textPassword;
     private Button buttonRegistrar;
     private ProgressDialog barra;
-    private int nIncencidios = 0;
 
     //variables de los datos a registrar
     private String name = "";
     private String email = "";
     private String password = ""; //firebase exige que tenga al menos 6 caracteres la pass
+    private int nIncencidios = 0;
+    private String tipousuario = "usuarionormal";
 
     FirebaseAuth Auth;
     DatabaseReference Database;
@@ -113,6 +114,7 @@ public class RegistrarActivity extends AppCompatActivity {
                     map.put("email", email);
                     map.put("password", password);
                     map.put("numeroincendios",nIncencidios);
+                    map.put("rol",tipousuario);
 
 
                     String id = Auth.getCurrentUser().getUid(); //obtener el id del usuario
@@ -132,6 +134,7 @@ public class RegistrarActivity extends AppCompatActivity {
                     Toast.makeText(RegistrarActivity.this, "No se ha podido registar dicho usuario." +
                             "Asegurese de que el EMAIL cumple con toda su sintaxis" + "¡CUIDADO CON LOS ESPACIOS AL FINAL!", Toast.LENGTH_LONG).show();
                 }
+                barra.dismiss();
             }
 
         });
